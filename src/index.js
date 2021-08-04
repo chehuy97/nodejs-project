@@ -6,8 +6,8 @@ require('dotenv').config()
 
 const app = express();
 
-// database()
-// production(app)
+database()
+production(app)
 routes(app)
 
 const port = process.env.PORT || 3000
