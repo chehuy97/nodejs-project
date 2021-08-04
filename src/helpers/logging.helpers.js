@@ -1,4 +1,4 @@
-import {transports, createLogger, format} from 'winston'
+const { transports, createLogger, format } = require('winston')
 const {combine, timestamp, prettyPrint, json} = format
 
 const logger = createLogger({

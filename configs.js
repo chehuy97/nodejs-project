@@ -1,6 +1,8 @@
 require('dotenv').config()
 
-export const EnvironmentVariable = {
+const environmentVariable = {
     PORT: process.env.PORT,
     DATABASE_CONNECTION: process.env.DATABASE_CONNECTION
 }
+
+module.exports = environmentVariable

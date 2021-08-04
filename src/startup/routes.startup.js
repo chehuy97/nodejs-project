@@ -4,8 +4,9 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const error = require("../middlewares/error.middlewares");
+const homeRouter = require("../routes/home.route");
 
-module.exports = app => {
+const routes = app => {
   app.use(cors({ origin: "*", credentials: true }));
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
@@ -23,6 +24,8 @@ module.exports = app => {
     next();
   });
 
-
+  app.use('/', homeRouter)
   app.use(error);
 };
+
+module.exports = routes
