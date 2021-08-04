@@ -2,10 +2,12 @@ const express = require('express');
 const routes = require('./startup/routes.startup')
 const database = require('./startup/database.startup');
 const production = require('./startup/production.startup');
+const logging = require('./startup/logging.startup')
 require('dotenv').config()
 
 const app = express();
 
+logging()
 database()
 production(app)
 routes(app)

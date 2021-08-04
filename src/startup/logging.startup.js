@@ -1,7 +1,7 @@
 require('express-async-errors');
 const { logger } = require('../helpers/logging.helpers')
 
-export const logging = () => {
+const logging = () => {
     process.on('uncaughtException', (ex) => {
         logger.error(ex.message)
         logger.error(ex)
@@ -16,3 +16,5 @@ export const logging = () => {
         process.exit(1);
     });
 }
+
+module.exports = logging

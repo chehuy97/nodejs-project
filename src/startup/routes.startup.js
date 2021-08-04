@@ -3,8 +3,9 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
-const error = require("../middlewares/error.middlewares");
+const error = require("../middlewares/error.middleware");
 const homeRouter = require("../routes/home.route");
+const authRouter = require("../routes/auth.router");
 
 const routes = app => {
   app.use(cors({ origin: "*", credentials: true }));
@@ -25,7 +26,8 @@ const routes = app => {
   });
 
   app.use('/', homeRouter)
-  app.use(error);
+  app.use('/auth', authRouter)
+  // app.use(error);
 };
 
 module.exports = routes

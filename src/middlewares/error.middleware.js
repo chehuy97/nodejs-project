@@ -1,5 +1,5 @@
 const { InternalServerError } = require("../helpers/error.helpers")
-const { logger } = require('../helpers/logging.helpers')
+const logger = require('../helpers/logging.helpers')
 
 const error = (err, req, res) => {
    logger.error(err);

@@ -5,4 +5,4 @@ const environmentVariable = {
     DATABASE_CONNECTION: process.env.DATABASE_CONNECTION
 }
 
-module.exports = environmentVariable
+module.exports =  environmentVariable
