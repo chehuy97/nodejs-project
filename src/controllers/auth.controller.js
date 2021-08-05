@@ -18,11 +18,14 @@ const login = async (req, res) => {
                 { password: { $eq: loginInfo.password } }
             ]
         }).exec()
+        console.log("user is ", user);
         if (user) {
             let accessToken = await generateToken(user, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE)
             let refreshToken = await generateToken(user, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE)
-            let userId = user.userId
+            let userId = user.id
             SuccessResponse(res, { userId, accessToken, refreshToken })
+        } else {
+            NotFound(res, 'Wrong username or password')
         }
     } catch (err) {
         BadRequest(res, err)
@@ -48,7 +51,7 @@ const refreshToken = async (req, res) => {
 const registerAccount = async (req, res) => {
     try {
         const userRequest = req.body
-        let userExist = await User.findOne({ email: userRequest.email }).exec()
+        let userExist = await User.findOne({ email: userRequest.email}).exec()
         if (!userExist) {
             let user = new User(userRequest)
             const result = await user.save()

@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: NodeJS Project
+  description: That is NodeJS project for learn
+  version: 'v1.0'
+servers:
+    - description: Local Host
+      url: http://localhost:5000/
+paths:
+  /auth/login:
+    post:
+        tags:
+          - 'Login'
+        summary: POST authentication
+        description: POST authentication
+        operationId: postAuthentication
+        parameters:
+          - in: 'header'
+            name: token
+            required: true
+            schema:
+              type: string
+              example: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTg4ODU3NTAsImV4cGlyZXNJbiI6NDMyMCwiaXAiOiI6OjEiLCJlbWFpbF9hZGRyZXNzIjoidHVvbmdtYXJ0aW4xMkB5b3BtYWlsLmNvbSIsInVzZXJuYW1lIjoid3d3In0.51aBVVpHZQssHlXQ7kPAQCRP6QlEAGRXNHjm5ykJlGQ
+        requestBody:
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: "string"
+                    example: "arthur@epmail.com"
+                  password:
+                    type: "string"
+                    example: "123456"
+        responses:
+          200:
+            description: POST authentication
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/postAuthenticationResponse'
+                examples:
+                  successExample:
+                    $ref: '#/components/examples/postAuthenticationResponse'
+                  notFoundExample:
+                    $ref: '#/components/examples/postFailAuthenticationResponse'
+
+components:
+  schemas:
+    postAuthenticationResponse:
+      type: object
+      properties:
+        httpStatusCode:
+          type: "number"
+          example: 200
+        errorMessage:
+          type: "string"
+          example: null
+        errorCode:
+          type: "number"
+          example: null
+        data:
+          type: object
+          properties:
+            userId:
+              type: "string"
+              example: "610a716274f9ede74955a4aa"
+            accessToken:
+              type: "string"
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjEwYTcxNjI3NGY5ZWRlNzQ5NTVhNGFhIiwibmFtZSI6ImFiY2RlZiIsImVtYWlsIjoidXNlcjFAZW1haWwuY29tIn0sImlhdCI6MTYyODEzNzM0OSwiZXhwIjoxNjI4MTQ0NTQ5fQ.DE8UytwZmlhRL5IG9hoTf04FL0kfGElhRNKVw9C9HlM"
+            refreshToken:
+              type: "string"
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjEwYTcxNjI3NGY5ZWRlNzQ5NTVhNGFhIiwibmFtZSI6ImFiY2RlZiIsImVtYWlsIjoidXNlcjFAZW1haWwuY29tIn0sImlhdCI6MTYyODEzNzM0OSwiZXhwIjoxOTQzNDk3MzQ5fQ.HX-iArIe7Dp2n7fzpzDX352xRVL-LSIlGBD4wCOTkiY"
+  examples:
+    postAuthenticationResponse:
+      value:
+        httpStatusCode: 200
+        errorMessage: null
+        errorCode: null
+        data:
+          userId: "610a716274f9ede74955a4aa"
+          accesstoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjEwYTcxNjI3NGY5ZWRlNzQ5NTVhNGFhIiwibmFtZSI6ImFiY2RlZiIsImVtYWlsIjoidXNlcjFAZW1haWwuY29tIn0sImlhdCI6MTYyODEzNzM0OSwiZXhwIjoxNjI4MTQ0NTQ5fQ.DE8UytwZmlhRL5IG9hoTf04FL0kfGElhRNKVw9C9HlM"
+          refreshtoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjEwYTcxNjI3NGY5ZWRlNzQ5NTVhNGFhIiwibmFtZSI6ImFiY2RlZiIsImVtYWlsIjoidXNlcjFAZW1haWwuY29tIn0sImlhdCI6MTYyODEzNzM0OSwiZXhwIjoxOTQzNDk3MzQ5fQ.HX-iArIe7Dp2n7fzpzDX352xRVL-LSIlGBD4wCOTkiY"
+    postFailAuthenticationResponse:
+      value:
+        httpStatusCode: 404
+        errorMessage: Wrong username or password
+        errorCode: 1
+        data: null
+      
+        
+    
+  
