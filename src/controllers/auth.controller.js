@@ -1,8 +1,8 @@
 const User = require('../model/user')
-const mongoose = require('mongoose')
 const { generateToken, verifyToken } = require('../helpers/jwt.helper')
 const { NotFound, SuccessResponse, BadRequest } = require('../helpers/error.helpers')
 const environmentVariable = require('../config')
+const { encrypt } = require('../libs/authentication')
 
 const ACCESS_TOKEN_LIFE = '2h'
 const ACCESS_TOKEN_SECRET = environmentVariable.ACCESS_TOKEN_SECRET || 'cewahuy.niceToSeeYou.2021'
@@ -10,13 +10,14 @@ const REFRESH_TOKEN_LIFE = '3650d'
 const REFRESH_TOKEN_SECRET = environmentVariable.REFRESH_TOKEN_SECRET || 'cewahuy.secrect.1234'
 
 const login = async (req, res) => {
-    console.log(process.env.ACCESS_TOKEN_SECRET);
     try {
-        let loginInfo = req.body
+        let {email, password} = req.body
+        encryptPassword = encrypt(password)
+        console.log('ENCRYPT PASSWORD IS ', encryptPassword);
         let user = await User.findOne({
             $and: [
-                { email: { $eq: loginInfo.email } },
-                { password: { $eq: loginInfo.password } }
+                { email: { $eq: email } },
+                { password: { $eq: encryptPassword } }
             ]
         }).exec()
         if (user) {
@@ -52,9 +53,11 @@ const refreshToken = async (req, res) => {
 
 const registerAccount = async (req, res) => {
     try {
-        const userRequest = req.body
+        let { password, ...userRequest} = req.body
         let userExist = await User.findOne({ email: userRequest.email}).exec()
         if (!userExist) {
+            userRequest.password = encrypt(password)
+            console.log('REGISTER ENCRYPT PASSWORD IS', userRequest.password);
             let user = new User(userRequest)
             const result = await user.save()
             SuccessResponse(res, result, 201)
