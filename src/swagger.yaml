@@ -28,7 +28,7 @@ paths:
                 properties:
                   email:
                     type: "string"
-                    example: "arthur@epmail.com"
+                    example: "arthur@email.com"
                   password:
                     type: "string"
                     example: "123456"

@@ -11,6 +11,5 @@ const userSchema = new mongoose.Schema({
 })
 
 userSchema.plugin(normalize)
-console.log('haha');
 
 module.exports = mongoose.model('user', userSchema)

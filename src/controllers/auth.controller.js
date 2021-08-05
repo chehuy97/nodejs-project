@@ -2,14 +2,15 @@ const User = require('../model/user')
 const mongoose = require('mongoose')
 const { generateToken, verifyToken } = require('../helpers/jwt.helper')
 const { NotFound, SuccessResponse, BadRequest } = require('../helpers/error.helpers')
+const environmentVariable = require('../config')
 
 const ACCESS_TOKEN_LIFE = '2h'
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || 'cewa.niceToSeeYou.2021'
+const ACCESS_TOKEN_SECRET = environmentVariable.ACCESS_TOKEN_SECRET || 'cewahuy.niceToSeeYou.2021'
 const REFRESH_TOKEN_LIFE = '3650d'
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'chehuy.secret.1997'
+const REFRESH_TOKEN_SECRET = environmentVariable.REFRESH_TOKEN_SECRET || 'cewahuy.secrect.1234'
 
 const login = async (req, res) => {
-    console.log('TRY TO LOGIN');
+    console.log(process.env.ACCESS_TOKEN_SECRET);
     try {
         let loginInfo = req.body
         let user = await User.findOne({
@@ -18,7 +19,6 @@ const login = async (req, res) => {
                 { password: { $eq: loginInfo.password } }
             ]
         }).exec()
-        console.log("user is ", user);
         if (user) {
             let accessToken = await generateToken(user, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE)
             let refreshToken = await generateToken(user, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE)

@@ -1,4 +1,3 @@
-const { SuccessResponse, BadRequest, NotFound } = require('../helpers/error.helpers')
 const jwt = require('jsonwebtoken')
 
 const generateToken = (user, secretSignature, tokenLife) => {
@@ -33,8 +32,6 @@ const verifyToken = (token, secretKey) => {
             if (error) {
                 return reject(error)
             } else {
-                console.log("Data is " + decoded);
-
                 return resolve(decoded)
             }
         })
