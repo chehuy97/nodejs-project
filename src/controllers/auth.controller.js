@@ -33,17 +33,19 @@ const login = async (req, res) => {
 }
 
 const refreshToken = async (req, res) => {
-    let token = res.body.accessToken
+    let token = req.body.refreshToken
     if (token) {
         try {
             let decoded = await verifyToken(token, REFRESH_TOKEN_SECRET)
             let user = decoded.data
             let newAccesstoken = await generateToken(user, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE)
             SuccessResponse(res, { newAccesstoken })
+            console.log('Success Refesh Token');
         } catch (err) {
             BadRequest(res, 'Wrong refresh token.')
         }
     } else {
+        console.log('Not Found Refesh Token');
         NotFound(res, 'Not found refesh token')
     }
 }

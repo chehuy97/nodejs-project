@@ -10,17 +10,10 @@ paths:
   /auth/login:
     post:
         tags:
-          - 'Login'
+          - 'Authentication'
         summary: POST authentication
         description: POST authentication
-        operationId: postAuthentication
-        parameters:
-          - in: 'header'
-            name: token
-            required: true
-            schema:
-              type: string
-              example: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTg4ODU3NTAsImV4cGlyZXNJbiI6NDMyMCwiaXAiOiI6OjEiLCJlbWFpbF9hZGRyZXNzIjoidHVvbmdtYXJ0aW4xMkB5b3BtYWlsLmNvbSIsInVzZXJuYW1lIjoid3d3In0.51aBVVpHZQssHlXQ7kPAQCRP6QlEAGRXNHjm5ykJlGQ
+        operationId: loginAuthentication
         requestBody:
           content:
             application/json:
@@ -38,16 +31,86 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/postAuthenticationResponse'
+                  $ref: '#/components/schemas/loginResponse'
                 examples:
                   successExample:
-                    $ref: '#/components/examples/postAuthenticationResponse'
+                    $ref: '#/components/examples/loginSuccessResponse'
                   notFoundExample:
-                    $ref: '#/components/examples/postFailAuthenticationResponse'
+                    $ref: '#/components/examples/loginFailResponse'
+  /auth/refreshToken:
+    post:
+        tags:
+          - 'Authentication'
+        summary: POST authentication
+        description: POST authentication
+        operationId: refreshAuthentication
+        requestBody:
+          content:
+            application/json:
+              schema:
+                properties:
+                  refreshToken:
+                    type: "string"
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjEwYTcxNjI3NGY5ZWRlNzQ5NTVhNGFhIiwibmFtZSI6ImFiY2RlZiIsImVtYWlsIjoidXNlcjFAZW1haWwuY29tIn0sImlhdCI6MTYyODEzNzM0OSwiZXhwIjoxNjI4MTQ0NTQ5fQ.DE8UytwZmlhRL5IG9hoTf04FL0kfGElhRNKVw9C9HlM"
+        responses:
+          200:
+            description: POST authentication
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/refreshResponse'
+                examples:
+                  successExample:
+                    $ref: '#/components/examples/refreshSuccessResponse'
+  /auth/register:
+    post:
+        tags:
+          - 'User'
+        summary: POST authentication
+        description: POST authentication
+        operationId: registerUser
+        requestBody:
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: "string"
+                    example: "arthur@email.com"
+                  password:
+                    type: "string"
+                    example: "123456"
+                  name:
+                    type: "string"
+                    example: "Arthur"
+                  gender:
+                    type: "string"
+                    example: "male"
+                  birthday:
+                    type: "string"
+                    example: '01-01-1998'
+                  phone:
+                    type: "string"
+                    example: "0987654321"
+        responses:
+          200:
+            description: POST authentication
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/registerResponse'
+                examples:
+                  successExample:
+                    $ref: '#/components/schemas/registerResponse'
 
 components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
   schemas:
-    postAuthenticationResponse:
+    loginResponse:
       type: object
       properties:
         httpStatusCode:
@@ -71,8 +134,60 @@ components:
             refreshToken:
               type: "string"
               example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjEwYTcxNjI3NGY5ZWRlNzQ5NTVhNGFhIiwibmFtZSI6ImFiY2RlZiIsImVtYWlsIjoidXNlcjFAZW1haWwuY29tIn0sImlhdCI6MTYyODEzNzM0OSwiZXhwIjoxOTQzNDk3MzQ5fQ.HX-iArIe7Dp2n7fzpzDX352xRVL-LSIlGBD4wCOTkiY"
+    refreshResponse:
+      type: object
+      properties:
+        httpStatusCode:
+          type: "number"
+          example: 200
+        errorMessage:
+          type: "string"
+          example: null
+        errorCode:
+          type: "number"
+          example: null
+        data:
+          type: object
+          properties:
+            newAccessToken:
+              type: "string"
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjEwYTcxNjI3NGY5ZWRlNzQ5NTVhNGFhIiwibmFtZSI6ImFiY2RlZiIsImVtYWlsIjoidXNlcjFAZW1haWwuY29tIn0sImlhdCI6MTYyODEzNzM0OSwiZXhwIjoxNjI4MTQ0NTQ5fQ.DE8UytwZmlhRL5IG9hoTf04FL0kfGElhRNKVw9C9HlM"
+    registerResponse:
+     type: object
+     properties:
+        httpStatusCode:
+          type: "number"
+          example: 200
+        errorMessage:
+          type: "string"
+          example: null
+        errorCode:
+          type: "number"
+          example: null
+        data:
+          type: object
+          properties:
+            email:
+              type: "string"
+              example: "arthur@email.com"
+            password:
+              type: "string"
+              example: "123456"
+            name:
+              type: "string"
+              example: "Arthur"
+            gender:
+              type: "string"
+              example: "male"
+            birthday:
+              type: "string"
+              example: '01-01-1998'
+            phone:
+              type: "string"
+              example: "0987654321"
+            
   examples:
-    postAuthenticationResponse:
+    loginSuccessResponse:
       value:
         httpStatusCode: 200
         errorMessage: null
@@ -81,13 +196,22 @@ components:
           userId: "610a716274f9ede74955a4aa"
           accesstoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjEwYTcxNjI3NGY5ZWRlNzQ5NTVhNGFhIiwibmFtZSI6ImFiY2RlZiIsImVtYWlsIjoidXNlcjFAZW1haWwuY29tIn0sImlhdCI6MTYyODEzNzM0OSwiZXhwIjoxNjI4MTQ0NTQ5fQ.DE8UytwZmlhRL5IG9hoTf04FL0kfGElhRNKVw9C9HlM"
           refreshtoken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjEwYTcxNjI3NGY5ZWRlNzQ5NTVhNGFhIiwibmFtZSI6ImFiY2RlZiIsImVtYWlsIjoidXNlcjFAZW1haWwuY29tIn0sImlhdCI6MTYyODEzNzM0OSwiZXhwIjoxOTQzNDk3MzQ5fQ.HX-iArIe7Dp2n7fzpzDX352xRVL-LSIlGBD4wCOTkiY"
-    postFailAuthenticationResponse:
+    loginFailResponse:
       value:
         httpStatusCode: 404
         errorMessage: Wrong username or password
         errorCode: 1
         data: null
-      
+    refreshSuccessResponse: 
+      value:
+        httpStatusCode: 200
+        errorMessage: null
+        errorCode: null
+        data:
+          newAccessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjEwYTcxNjI3NGY5ZWRlNzQ5NTVhNGFhIiwibmFtZSI6ImFiY2RlZiIsImVtYWlsIjoidXNlcjFAZW1haWwuY29tIn0sImlhdCI6MTYyODEzNzM0OSwiZXhwIjoxNjI4MTQ0NTQ5fQ.DE8UytwZmlhRL5IG9hoTf04FL0kfGElhRNKVw9C9HlM"
+        
+security:
+- bearerAuth: [] 
         
     
   

@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 
 const generateToken = (user, secretSignature, tokenLife) => {
-    console.log('TOKEN IS', secretSignature);
     return new Promise((resolve, reject) => {
         let userData = {
             id: user.id,
